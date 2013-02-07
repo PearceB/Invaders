@@ -27,6 +27,10 @@
 
 ; ShotWorld -> ShotWorld 
 ; move each shot up by one pixel
+(check-expect (tock empty) empty)
+(check-expect (tock (list 7 5)) (list 6 4))
+(check-expect (tock (list 3 3 3 3 3)) (list 2 2 2 2 2))
+(check-expect (tock (list -8 -7)) (list -9 -8))
 
 (define (tock w)
   (cond
@@ -35,6 +39,9 @@
 
 ; ShotWorld KeyEvent -> ShotWorld 
 ; add a shot to the world if the space bar was hit 
+(check-expect (keyh (list 2 3 4) " ") (list 80 2 3 4))
+(check-expect (keyh (list 1 2) "k") (list 1 2))
+(check-expect (keyh empty " ") (list 80))
 
 (define (keyh w ke)
   (cond
@@ -43,6 +50,10 @@
 
 ; ShotWorld -> Image 
 ; add each shot y on w at (MID,y) to the background image 
+(check-expect (to-image empty) BACKGROUND)
+(check-expect (to-image (list 1 2 3)) (place-image SHOT XSHOTS 1
+                                                  (place-image SHOT XSHOTS 2
+                                                               (place-image SHOT XSHOTS 3 BACKGROUND))))
 
 (define (to-image w)
   (cond
