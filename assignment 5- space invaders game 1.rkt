@@ -60,10 +60,15 @@
     [(empty? w) BACKGROUND]
     [else (place-image SHOT XSHOTS (first w) (to-image (rest w)))]))
 
-; ShotWorld -> ShotWorld 
+; ShotWorld -> ShotWorld
+; Create a ShotWorld that allows the user to play Space Invaders
 
 (define (main w0)
   (big-bang w0
             (on-tick tock)
             (on-key keyh)
             (to-draw to-image)))
+
+; The function Main takes a ShotWorld, executes the functions tock, keyh,
+; and to-image at the appropriate times creating a new ShotWorld that
+; includes the changes made by using tock, keyh, and to-image
