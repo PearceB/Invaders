@@ -25,16 +25,25 @@
 ; A ShotWorld is List-of-numbers. 
 ; interp.: the collection of shots fired and moving straight up
 
+; Number -> Boolean
+; Determine if the y-value off a number is less than 0
+(check-expect (off-top 7) false)
+(check-expect (off-top -7) true)
+
+(define (off-top n)
+  (if (<= n 0) true false))
+
 ; ShotWorld -> ShotWorld 
 ; move each shot up by one pixel
 (check-expect (tock empty) empty)
 (check-expect (tock (list 7 5)) (list 6 4))
 (check-expect (tock (list 3 3 3 3 3)) (list 2 2 2 2 2))
-(check-expect (tock (list -8 -7)) (list -9 -8))
+(check-expect (tock (list -8 -7)) empty)
 
 (define (tock w)
   (cond
     [(empty? w) empty]
+    [(off-top (first w)) (tock (rest w))]
     [else (cons (sub1 (first w)) (tock (rest w)))]))
 
 ; ShotWorld KeyEvent -> ShotWorld 
@@ -68,7 +77,3 @@
             (on-tick tock)
             (on-key keyh)
             (to-draw to-image)))
-
-; The function Main takes a ShotWorld, executes the functions tock, keyh,
-; and to-image at the appropriate times creating a new ShotWorld that
-; includes the changes made by using tock, keyh, and to-image
